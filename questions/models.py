@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 class Stage(models.Model):
     title = models.CharField(max_length=150)
@@ -26,9 +27,11 @@ class Question(models.Model):
         QuestionPack,
         on_delete=models.SET_NULL,
         null=True,
+        related_name='questionpack'
     )
     question = models.TextField()
     answer = models.TextField()
+    difficulty = models.CharField(max_length=100, choices=[('Easy', 'Easy'), ('Medium', 'Medium'),('Hard', 'Hard')], default='Medium')
 
     def __str__(self):
         return self.title
@@ -47,3 +50,16 @@ class FirmQuestionPackConnector(models.Model):
 
     def __str__(self):
         return str(self.firm) + ": " + str(self.question_pack)
+
+class UserAnswer(models.Model):
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+    )
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE
+    )
+    my_answer = models.TextField()
+    time_started = models.DateTimeField(null=True, blank=True)
+    time_finished = models.DateTimeField(null=True, blank=True)

@@ -46,3 +46,13 @@ def questions_page(request):
         'stage_list': Stage.objects.all(),
     }
     return render(request, 'questions.html', context)
+
+
+def questions_pack_detail_view(request, pk):
+
+    question_pack = QuestionPack.objects.get(pk=pk)
+
+    context = {
+        'question_pack': question_pack
+    }
+    return render(request, 'questions_pack_detail_view.html', context)

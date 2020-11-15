@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <body class="reset-page">
+{% endblock body %}
+
+{% block content %}
+     <div class="wrapper">
+         <div class="main">
+             <div class="squares square1"></div>
+              <div class="squares square2"></div>
+              <div class="squares square3"></div>
+              <div class="squares square4"></div>
+              <div class="squares square5"></div>
+              <div class="squares square6"></div>
+              <div class="squares square7"></div>
+                    <div class="container">
+                        <div class="section">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="text-center">
+                                                <h1 class="card-title mr-2 d-inline-block">{{ question_pack.name }}</h1>
+                                                <sup>
+                                                    <a class=""><span class="badge badge-info">{% if question_pack.price == 0 %}Free{% else %}Premium{% endif %}</span></a>
+                                                </sup>
+                                            </div>
+                                            <div class="card text-center" data-background-color="red">
+                                                <table class="table table-borderless">
+                                                    <thead></thead>
+                                                    <tbody class="">
+                                                    {% for question in question_pack.questionpack.all %}
+                                                        <tr>
+                                                            <td><h4 class=""><i class="tim-icons icon-spaceship"></i> {{ question.title }}</h4></td>
+                                                            <td><button class="btn btn-warning btn-sm" href="" id="button{{ forloop.counter }}">View</button></td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <button class="btn btn-primary">Update my pathways</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6" style="border-left: 1px solid lightblue">
+                                            {% for question in question_pack.questionpack.all %}
+                                            <div class="collapse multi-collapse{% if forloop.counter == 1 %} show{% endif %}" id="q{{ forloop.counter }}">
+                                                <div class="text-center">
+                                                    <h1 class="card-title d-inline-block mr-2">{{ question.title }}</h1>
+                                                    <sup>
+                                                        <a class=""><span class="badge badge-primary">{{ question.difficulty }}</span></a>
+                                                    </sup>
+                                                </div>
+                                                <div class="card text-center" data-background-color="blue" id="q1">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Summary</h3>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>Make sure you use a pen and paper to do this Q1</p>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button class="btn btn-primary btn-sm">Launch</button>
+                                                        <i class="tim-icons icon-time-alarm"></i> 5 Minutes
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            {% endfor %}
+                                            <div class="alert alert-primary mt-4">
+                                                <p><i class="tim-icons icon-alert-circle-exc"></i>
+                                                Make sure to update your pathways after doing questions so we can tailor your recommendations
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+         </div>
+     </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        {% for question in question_pack.questionpack.all %}
+            document.getElementById('button{{ forloop.counter }}').addEventListener("click", function (){
+                $('.collapse').collapse('hide');
+                $('#q{{ forloop.counter }}').collapse('show');
+            });
+        {% endfor %}
+    </script>
+{% endblock scripts %}
