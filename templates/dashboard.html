@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <body class="reset-page">
+{% endblock body %}
+
+
+{% block content %}
+<style>
+.handle {
+    display: inline-block;
+    border-top: 3px solid var(--light);
+    width: 30px;
+    padding-top: 5px;
+        margin-top: 4px;
+    cursor: grab;
+}
+.handle:after, .handle:before {
+    display: block;
+    content: "";
+    padding-top: 5px;
+    border-top: 3px solid var(--light);
+}
+.handle:hover, .handle:hover:before, .handle:hover:after {
+    border-color: var(--primary);
+}
+.handle:active, .handle:active:before, .handle:active:after {
+    cursor: grabbing;
+}
+
+</style>
+
+
+
+    <div class="wrapper">
+
+        <div class="main">
+<div class="squares square1"></div>
+              <div class="squares square2"></div>
+              <div class="squares square3"></div>
+              <div class="squares square4"></div>
+              <div class="squares square5"></div>
+              <div class="squares square6"></div>
+              <div class="squares square7"></div>
+            <div class="container">
+<div class="section">
+
+
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="card" data-background-color="red">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <button class="btn btn-neutral btn-sm">Consulting</button>
+                                    </div>
+                                    <div class="col-8">
+                                        <h1 class="card-title d-flex justify-content-center">{{ user.get_first_name }}'s firms</h1>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <button class="btn btn-sm btn-warning" id="tutorialButton">Tutorial</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                            <div class="alert alert-warning collapse" id="tutorial"><p>
+                                Hey I am the tutorial text
+                            </p></div>
+                                <div class="card mt-0">
+
+                                <table class="table table-borderless">
+                                    <thead>
+                                    </thead>
+                                    <tbody id="firms">
+                                        {% for myfirm in firm_list %}
+                                        <tr data-lookup="{{ myfirm.id }}">
+                                            <td>
+                                                <img src="{{ myfirm.firm.image.url }}" class="img" style="max-height: 50px">
+                                            </td>
+                                            <td>
+                                                <input type="text" value="" placeholder="{{ myfirm.firm.name }}" class="form-control" readonly/>
+                                            </td>
+
+                                            <td>
+                                                <div class="">
+                                                <select class="form-control" data-size="3" data-style="btn btn-primary" title="Select stage">
+
+                                                    {% for stage in stage_list %}
+                                                        {% if stage.firm == myfirm.firm %}
+                                                            <option style="color: #1d8cf8" value="{{ stage.name }}" data-lookup="{{ stage.id}}" {% if myfirm.stage == stage %}selected{% endif %}>
+                                                                {{ stage.name}}
+                                                            </option>
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success">Pathway</button>
+                                            </td>
+                                            <td>
+                                                <span class="handle"></span>
+                                            </td>
+
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                            <form method="post" id="orderingForm" action="{% url 'save-firm-ordering' %}">
+                                {% csrf_token %}
+                                <input type="hidden" id="orderingInput" name="ordering">
+                                <input type="hidden" id="stagesInput" name="stage">
+                            </form>
+                                <button id="saveOrdering" class="btn btn-outline-primary float-right mr-2">Save changes</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="card" data-background-color="red">
+                            <div class="card-header">
+                                 <h1 class="card-title d-flex justify-content-center">{{ user.get_first_name }}'s Dashboard</h1>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-4 d-flex align-items-stretch">
+                                        <div class="card">
+                                        <div class="text-center pt-1">
+                                            <a class="text-center"><span class="badge badge-primary">Daily challenge</span></a>
+                                        </div>
+                                        <div class="card-header">
+                                            <img src="{% static '/assets/img/etherum.png'%}" class="img-center img-fluid w-50">
+                                        </div>
+                                        <div class="card-body d-flex flex-column text-center">
+                                            <button class="btn btn-success btn-sm mt-auto">Let's go</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                     <div class="col-4 d-flex align-items-stretch">
+                                        <div class="card">
+                                        <div class="text-center pt-1">
+                                            <a class="text-center"><span class="badge badge-primary">Daily streak</span></a>
+                                        </div>
+                                        <div class="card-header text-center">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                <button class="btn btn-primary btn-round px-3">
+                                                    <i class="tim-icons icon-heart-2"></i>
+                                                </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="card-body d-flex flex-column text-center">
+                                            <button class="btn btn-success btn-sm mt-auto">{% if streak == 1 %}1 day {% else %}{{ streak }} days{%endif%}</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 d-flex align-items-stretch">
+                                        <div class="card">
+                                        <div class="text-center pt-1">
+                                            <a class="text-center"><span class="badge badge-primary">Get premium</span></a>
+                                        </div>
+                                        <div class="card-header">
+                                            <img src="{% static '/assets/img/etherum.png'%}" class="img-center img-fluid w-50">
+                                        </div>
+                                        <div class="card-body d-flex flex-column text-center">
+                                            <button class="btn btn-success btn-sm mt-auto">Buy</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" data-background-color="red">
+                            <div class="card-header">
+                                <h1 class="card-title d-flex justify-content-center">Recommended for you</h1>
+                                <div class="card-body pt-0">
+                                    <div class="row">
+                                       <div class="col-6 d-flex align-items-stretch">
+                                        <div class="card">
+                                        <div class="text-center pt-1">
+                                            <a class="text-center"><span class="badge badge-primary">McKinsey&Co.</span></a>
+                                        </div>
+                                        <div class="card-header text-center">
+                                            <div class="row">
+                                            <div class="col-5 mx-0 px-2">
+                                            <img src="{% static 'assets/img/mckinsey.jpg' %}" class="img" style="">
+                                            </div>
+                                                <div class="col-7 mx-0 px-2">
+                                            <p class="">How to ace the imbellus test</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body d-flex flex-column text-center">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                <button class="btn btn-success btn-sm mt-auto">Preview</button>
+                                                </div>
+                                                <div class="col-6">
+                                                <button class="btn btn-danger btn-sm mt-auto">Buy</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+
+
+                                        <div class="col-6 d-flex align-items-stretch">
+                                        <div class="card">
+                                        <div class="text-center pt-1">
+                                            <a class="text-center"><span class="badge badge-primary">Boston Consulting Group</span></a>
+                                        </div>
+                                        <div class="card-header text-center">
+                                            <div class="row">
+                                            <div class="col-5 mx-0 px-2">
+                                            <img src="{% static 'assets/img/mckinsey.jpg' %}" class="img" style="">
+                                            </div>
+                                                <div class="col-7 mx-0 px-2">
+                                            <p class="">How to ace the imbellus test</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body d-flex flex-column text-center">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                <button class="btn btn-success btn-sm mt-auto">Preview</button>
+                                                </div>
+                                                <div class="col-6">
+                                                <button class="btn btn-danger btn-sm mt-auto">Buy</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-5">
+                    <i class="tim-icons icon-alert-circle-exc"></i>
+                    Please complete at least 1 pathway, so that we can tailor your exercises
+                </div>
+
+
+            </div></div></div>
+        </div>
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.12.0/dist/sortable.umd.min.js"></script>
+    <script>
+    const firms = document.getElementById('firms');
+    let sortable = Sortable.create(firms, {
+        handle: '.handle',
+    });
+
+    const saveOrderingButton = document.getElementById('saveOrdering');
+    const orderingForm = document.getElementById('orderingForm');
+    const formInputOrdering = orderingForm.querySelector('#orderingInput');
+    const formInputStage = orderingForm.querySelector('#stagesInput');
+
+    function saveOrdering(){
+        const rows = document.getElementById('firms').querySelectorAll('tr');
+        let ids = []
+        for(let row of rows){
+            ids.push(row.dataset.lookup);
+        }
+        formInputOrdering.value = ids.join(',');
+
+        const rows2 = document.getElementById('firms').querySelectorAll('option:checked');
+        let ids2 = []
+        for(let row2 of rows2){
+            ids2.push(row2.dataset.lookup);
+        }
+        formInputStage.value = ids2.join(',');
+
+        orderingForm.submit();
+    }
+
+    saveOrderingButton.addEventListener('click', saveOrdering);
+
+    </script>
+    <script>
+    $(document).ready(function(){
+        const button = document.getElementById('tutorialButton');
+        button.addEventListener('click', function(){
+           $('#tutorial').collapse("toggle");
+        });
+    });
+
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <body class="reset-page">
+{% endblock body %}
+
+{% block content %}
+     <div class="wrapper">
+         <div class="main">
+             <div class="squares square1"></div>
+              <div class="squares square2"></div>
+              <div class="squares square3"></div>
+              <div class="squares square4"></div>
+              <div class="squares square5"></div>
+              <div class="squares square6"></div>
+              <div class="squares square7"></div>
+                    <div class="container">
+                        <div class="section">
+                            <div class="row">
+                                <div class="col-lg-4 order-1">
+                                    <!--First card - Questions answered-->
+                                    <div class="card card-stats">
+                                        <div class="card-header">
+                                            <h1 class="card-title text-center">{{ user.get_first_name }}'s Answers</h1>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row px-0 mx-0">
+                                                <div class="col-6 mx-0 px-0">
+                                                    <div class="icon-big text-center icon-primary mx-0 px-0" style="font-size: 5em"><i class="tim-icons icon-trophy text-warning"></i></div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <br/>
+                                                    <h2 class="my-0 font-weight-bold">12</h2>
+                                                    Questions Completed
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-center">
+                                            <button class="btn btn-primary">Review</button>
+                                        </div>
+                                    </div>
+                                    <!-- Second card: Suggested-->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h1 class="card-title">Suggested for you</h1>
+                                        </div>
+                                        <div class="card-body text-center pb-0">
+                                                <h4><i class="tim-icons icon-spaceship"></i> MBB Cases</h4>
+                                                <h4><i class="tim-icons icon-spaceship"></i> Imbellus</h4>
+                                                <h4><i class="tim-icons icon-spaceship"></i> PEI prep</h4>
+                                        </div>
+                                        <div class="card-footer text-center mt-0">
+                                            <div class="alert alert-info">
+                                                <i class="tim-icons icon-alert-circle-exc"></i> Search for me on the right
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- Question pack part -->
+                                <div class="col-lg-8 order-lg-1 order-0">
+                                    <div class="card">
+                                        <div class="card-header text-center">
+                                            <h1 class="card-title">3x your application success with regular practise</h1>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 text-center">
+                                                    <form method="GET">
+                                                        <div class="d-inline-block">
+                                                        <div class="input-group">
+                                                            <input type="text" name="search" placeholder="{% if request.GET.search %}{{ request.GET.search }}{% else %}Search directly{% endif %}" class="form-control">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="tim-icons icon-bulb-63"></i></span>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                        <h4 class="d-inline mx-2">OR</h4>
+                                                        <div class="d-inline-block mx-2">
+                                                            <select class="form-control" data-size="3" data-style="btn btn-primary btn-simple" title="Firm" name="firm">
+                                                                  <option disabled {% if request.GET.firm is None %}selected{% endif %}>Select Firm</option>
+                                                                    {% for firm in firm_list %}
+                                                                            {{ firm.id }} {{ request.GET.firm }}
+                                                                    <option {% if firm.id == request.GET.firm|add:"0" %}selected {% endif %}style="color: #1d8cf8" value="{{firm.id}}">{{firm.name}}</option>
+                                                                    {% endfor %}
+
+                                                            </select>
+                                                        </div>
+                                                        <div class="d-inline-block mx-2">
+                                                            <select class="form-control" data-size="3" data-style="btn btn-primary btn-simple" title="Stage" name="stage">
+                                                                  <option disabled {% if request.GET.stage is None %}selected{% endif %}>Select Stage</option>
+                                                                   {% for stage in stage_list %}
+                                                                    <option {% if stage.id == request.GET.stage|add:"0"  %}selected{% endif %} style="color: #1d8cf8" value="{{stage.id}}">{{stage.title}}</option>
+                                                                    {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <button class="btn btn-primary btn-sm" type="submit" name="action">Go</button>
+                                                    </form>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        {% for question_pack in question_packs %}
+                                                        <div class="col-lg-4 d-flex align-items-stretch">
+                                                            <div class="card" data-background-color="red">
+                                                                <div class="card-header">
+                                                                    <div class="float-left">
+                                                                        {% for firms in question_pack.firmquestions.all %}
+                                                                            {% if forloop.counter <= 3 %}
+                                                                            <img src="{{ firms.firm.image.url }}" class="img" style="max-height: 30px">
+                                                                            {% elif forloop.counter == 4 %}
+                                                                                <strong>+{{ forloop.revcounter}}</strong>
+                                                                            {% else %}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                    <div class="float-right">
+                                                                        <a class="text-center"><span class="badge badge-info">{% if question_pack.price == 0 %}Free{% else %}Premium{% endif %}</span></a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-body text-center d-flex flex-column text-center">
+                                                                    <h2 class="card-header">{{ question_pack.name }}</h2>
+                                                                </div>
+                                                                <div class="card-footer text-center ">
+                                                                    <button class="btn btn-primary mt-auto" href="#">Open</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <div class="">
+                                                {% if question_packs.has_other_pages %}
+                                                            <ul class="pagination pagination-primary">
+                                                            {% if question_packs.has_previous %}
+                                                                <li class="page-item">
+                                                                    <a class="page-item"
+                                                                       href="?page={{ question_packs.previous_page_number}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}{% if request.GET.firm %}&firm={{ request.GET.firm }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}"
+                                                                       aria-label="Previous">
+                                                                        <span aria-hidden="true"><i class="tim-icons icon-double-left"></i></span>
+                                                                    </a>
+                                                                </li>
+                                                                {% else %}
+                                                                <li class="disabled"><a class="page-item"><span><i class="tim-icons icon-double-left"></i></span></a></li>
+                                                            {% endif %}
+
+                                                            {% for num in question_packs.paginator.page_range %}
+                                                                {% if question_packs.number == num %}
+                                                                    <li class="page-item active">
+                                                                        <a class="page-link" href="#link">{{ num }}</a>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li class="page-item">
+                                                                        <a class="page-link"
+                                                                        href="?page={{ num }}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}{% if request.GET.firm %}&firm={{ request.GET.firm }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}">
+                                                                        {{ num }}
+                                                                        </a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                            {% if question_packs.has_next %}
+                                                                <li class="page-item">
+                                                                    <a class="page-item"
+                                                                       href="?page={{ question_packs.next_page_number}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}{% if request.GET.firm %}&firm={{ request.GET.firm }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}"
+                                                                       aria-label="Next">
+                                                                        <span aria-hidden="true"><i class="tim-icons icon-double-right"></i></span>
+                                                                    </a>
+                                                                </li>
+                                                                {% else %}
+                                                                <li class="disabled"><a class="page-item"><span><i class="tim-icons icon-double-right"></i></span></a></li>
+                                                            {% endif %}
+                                                            </ul>
+                                                        {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+         </div>
+     </div>
+
+
+{% endblock content %}

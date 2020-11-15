@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+ {% block body %}
+<body class="register-page">
+{% endblock body %}
+
+{% block head %}
+    {{ wizard.form.media }}
+{% endblock head %}
+
+{% block content %}
+
+    <div class="wrapper">
+
+        <div class="page-header">
+
+            <div class="page-header-image"></div>
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-10 offset-lg-1 ">
+                         <div class="card card-register">
+
+                             <div class="card-header">
+                                <img class="card-img" src="{% static '/assets/img/square1.png'%}" alt="Card image">
+                                 <h4 class="card-title" style="color: #fff">Complete profile</h4>
+                                 <hr class="line-primary" />
+                                 <div class="progress-container progress-primary mx-3">
+                                    <span class="progress-badge">Profile complete</span>
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
+                                        <span class="progress-value">75%</span>
+                                      </div>
+                                    </div>
+                                 </div>
+                             </div>
+                             <div class="card-body">
+                            <form class="form" method="POST">
+                                {% csrf_token %}
+                                {{ wizard.management_form }}
+                                <div class="form-group" style="">
+                                {{ form|crispy }}
+                                </div>
+                                <button class="btn btn-info btn-round btn-lg" type="submit">Complete profile</button>
+                            </form>
+                             </div>
+                         </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="register-bg"></div>
+              <div id="square1" class="square square-1"></div>
+              <div id="square2" class="square square-2"></div>
+              <div id="square3" class="square square-3"></div>
+              <div id="square4" class="square square-4"></div>
+              <div id="square5" class="square square-5"></div>
+              <div id="square6" class="square square-6"></div>
+
+
+
+        </div>
+    </div>
+{% endblock content %}
