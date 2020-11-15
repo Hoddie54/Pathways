@@ -1,0 +1,11 @@
+Django
+gunicorn
+WhiteNoise
+psycopg2
+pip
+environs
+dj-database-url
+django-crispy-forms
+django-smtp-ssl
+django-sendgrid-v5
+Pillow
