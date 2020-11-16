@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <body class="reset-page">
+{% endblock body %}
+
+{% block content %}
+     <div class="wrapper">
+         <div class="main">
+             <div class="squares square1"></div>
+              <div class="squares square2"></div>
+              <div class="squares square3"></div>
+              <div class="squares square4"></div>
+              <div class="squares square5"></div>
+              <div class="squares square6"></div>
+              <div class="squares square7"></div>
+                    <div class="container">
+                        <div class="section">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row text-center">
+                                        <div class="col-1">
+                                            <a href="{% url 'questions_pack_detail_view' question.question_pack.pk %}"><i class="tim-icons icon-double-left"></i></a>
+                                        </div>
+                                        <div class="col-2">
+                                            <h3 class="card-title">
+                                            <i class="tim-icons icon-time-alarm"></i> {{ question.estimated_time }} Mins
+                                            </h3>
+                                        </div>
+                                        <div class="col-6">
+                                            <h1 class="card-title">{{ question.title }}</h1>
+                                        </div>
+                                        <div class="col-3">
+                                            <a class=""><span class="badge badge-primary">{{ question.difficulty }}</span></a>
+                                        </div>
+                                    </div>
+                                     <div class="text-center">
+                                         <button class="btn btn-primary btn-sm" id="buttonq">View question</button>
+                                         <button class="btn btn-primary btn-sm" id="buttona">View model answer</button>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-lg-8 offset-lg-1">
+                                            <div class="card collapse show" data-background-color="red" id="q">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">Question:</h2>
+                                                    <p>{{ question.question }}</p>
+                                                    <h2 class="card-title">You answered:</h2>
+                                                    <form method="POST" class="form">
+                                                        {% csrf_token %}
+                                                        <textarea class="form-control" type="text" name="answer" placeholder="Write your answer here"></textarea>
+
+                                                        <button type="submit" class="btn btn-primary mt-2">Submit answer</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="card collapse" data-background-color="blue" id="ans">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">Example answer:</h2>
+                                                    <p>{{ question.answer }}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+         </div>
+     </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        document.getElementById('buttonq').addEventListener("click", function (){
+            $(".collapse").collapse('hide');
+            $("#q").collapse('show');
+        });
+
+         document.getElementById('buttona').addEventListener("click", function (){
+            $(".collapse").collapse('hide');
+            $("#ans").collapse('show');
+        });
+    </script>
+{% endblock scripts %}

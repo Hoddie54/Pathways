@@ -19,52 +19,12 @@
                     <div class="container">
                         <div class="section">
                             <div class="row">
-                                <div class="col-lg-4 order-1">
-                                    <!--First card - Questions answered-->
-                                    <div class="card card-stats">
-                                        <div class="card-header">
-                                            <h1 class="card-title text-center">{{ user.get_first_name }}'s Answers</h1>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row px-0 mx-0">
-                                                <div class="col-6 mx-0 px-0">
-                                                    <div class="icon-big text-center icon-primary mx-0 px-0" style="font-size: 5em"><i class="tim-icons icon-trophy text-warning"></i></div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <br/>
-                                                    <h2 class="my-0 font-weight-bold">{{ questions_completed }}</h2>
-                                                    Questions Completed
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer d-flex justify-content-center">
-                                            <a href="{% url 'my_answers_search_view' %}" style="color: #fff"><button class="btn btn-primary">Review</button></a>
-                                        </div>
-                                    </div>
-                                    <!-- Second card: Suggested-->
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h1 class="card-title">Suggested for you</h1>
-                                        </div>
-                                        <div class="card-body text-center pb-0">
-                                                <h4><i class="tim-icons icon-spaceship"></i> MBB Cases</h4>
-                                                <h4><i class="tim-icons icon-spaceship"></i> Imbellus</h4>
-                                                <h4><i class="tim-icons icon-spaceship"></i> PEI prep</h4>
-                                        </div>
-                                        <div class="card-footer text-center mt-0">
-                                            <div class="alert alert-info">
-                                                <i class="tim-icons icon-alert-circle-exc"></i> Search for me on the right
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
                                 <!-- Question pack part -->
-                                <div class="col-lg-8 order-lg-1 order-0">
+                                <div class="col-12">
                                     <div class="card">
                                         <div class="card-header text-center">
-                                            <h1 class="card-title">3x your application success with regular practise</h1>
+                                            <h1 class="card-title">My Answers</h1>
+                                            <h3 class="card-title">Review your previous answers and see how you've progressed</h3>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
@@ -81,7 +41,7 @@
                                                         <h4 class="d-inline mx-2">OR</h4>
                                                         <div class="d-inline-block mx-2">
                                                             <select class="form-control" data-size="3" data-style="btn btn-primary btn-simple" title="Firm" name="firm">
-                                                                  <option value="0" {% if request.GET.firm is None %}selected{% endif %}>Select Firm</option>
+                                                                  <option value='0' aria-disabled {% if request.GET.firm is None %}selected{% endif %} >Select Firm</option>
                                                                     {% for firm in firm_list %}
                                                                             {{ firm.id }} {{ request.GET.firm }}
                                                                     <option {% if firm.id == request.GET.firm|add:"0" %}selected {% endif %}style="color: #1d8cf8" value="{{firm.id}}">{{firm.name}}</option>
@@ -91,7 +51,7 @@
                                                         </div>
                                                         <div class="d-inline-block mx-2">
                                                             <select class="form-control" data-size="3" data-style="btn btn-primary btn-simple" title="Stage" name="stage">
-                                                                  <option value="0" {% if request.GET.stage is None %}selected{% endif %}>Select Stage</option>
+                                                                  <option value='0' {% if request.GET.stage is None %}selected{% endif %}>Select Stage</option>
                                                                    {% for stage in stage_list %}
                                                                     <option {% if stage.id == request.GET.stage|add:"0"  %}selected{% endif %} style="color: #1d8cf8" value="{{stage.id}}">{{stage.title}}</option>
                                                                     {% endfor %}
@@ -103,7 +63,7 @@
                                                 <div class="col-12">
                                                     <div class="row">
                                                         {% for question_pack in question_packs %}
-                                                        <div class="col-lg-4 d-flex align-items-stretch">
+                                                        <div class="col-lg-3 d-flex align-items-stretch">
                                                             <div class="card" data-background-color="red">
                                                                 <div class="card-header">
                                                                     <div class="float-left">
@@ -122,9 +82,15 @@
                                                                 </div>
                                                                 <div class="card-body text-center d-flex flex-column text-center">
                                                                     <h2 class="card-header">{{ question_pack.name }}</h2>
+
                                                                 </div>
                                                                 <div class="card-footer text-center ">
-                                                                    <a href="{% url 'questions_pack_detail_view' question_pack.pk %}"><button class="btn btn-primary mt-auto">Open</button></a>
+                                                                    {% for q in questions_answered %}
+
+                                                                    {% if forloop.counter == forloop.parentloop.counter%}<h5 class="card-header mb-2">Questions answered:  {{ q }}</h5>{% endif %}
+                                                                    {% endfor %}
+
+                                                                    <a href="{% url 'my_answers_question_pack_detail' question_pack.pk %}"><button class="btn btn-primary mt-auto">Open</button></a>
                                                                 </div>
                                                             </div>
                                                         </div>

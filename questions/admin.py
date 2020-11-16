@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import QuestionPack, Question, FirmQuestionPackConnector, Stage
+from .models import QuestionPack, Question, FirmQuestionPackConnector, Stage, UserAnswer
 
 
 class SectionInLine(admin.StackedInline):
@@ -19,3 +19,4 @@ class QuestionPackAdmin(admin.ModelAdmin):
 
 admin.site.register(QuestionPack, QuestionPackAdmin)
 admin.site.register(Stage)
+admin.site.register(UserAnswer)

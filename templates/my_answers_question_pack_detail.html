@@ -32,18 +32,17 @@
                                                 <table class="table table-borderless">
                                                     <thead></thead>
                                                     <tbody class="">
+
                                                     {% for question in question_pack.questionpack.all %}
+
                                                         <tr>
                                                             <td><h4 class=""><i class="tim-icons icon-spaceship"></i> {{ question.title }}</h4></td>
                                                             <td>
-
-
-
-
-                                                                        <button class="btn btn-primary btn-sm" href="" id="button{{ forloop.counter }}">View</button>
-
-
-
+                                                                {% for answer in my_answers %}
+                                                                    {% if answer.question.id == question.id %}
+                                                                    <button class="btn btn-warning btn-sm" href="" id="button{{ forloop.parentloop.counter }}">Review</button>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -63,24 +62,35 @@
                                                         <a class=""><span class="badge badge-primary">{{ question.difficulty }}</span></a>
                                                     </sup>
                                                 </div>
-                                                <div class="card text-center" data-background-color="blue" id="q1">
+                                                <div class="card text-center" data-background-color="blue">
                                                     <div class="card-header">
                                                         <h3 class="card-title">Summary</h3>
                                                     </div>
                                                     <div class="card-body">
-                                                        <p>Make sure you use a pen and paper to do this Q1</p>
+                                                        {% for answer in my_answers %}
+
+                                                            {% if answer.question.id == question.id %}
+                                                                     <p>This question was last attempted on {{answer.time_finished}}</p>
+
+                                                            {% endif %}
+                                                            {% endfor %}
                                                     </div>
+
                                                     <div class="card-footer">
-                                                        <a href="{% url 'question_answer_view' question.pk %}"><button class="btn btn-primary btn-sm">Launch</button></a>
-                                                        <i class="tim-icons icon-time-alarm"></i> {{ question.estimated_time }} Minutes
+                                                    {% for answer in my_answers %}
+                                                        {% if answer.question.id == question.id %}
+                                                            <a href="{% url 'my_answer_review' answer.pk%}"><button class="btn btn-primary btn-sm">Review question</button></a>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                     </div>
+
                                                 </div>
 
                                             </div>
                                             {% endfor %}
                                             <div class="alert alert-primary mt-4">
                                                 <p><i class="tim-icons icon-alert-circle-exc"></i>
-                                                Make sure to update your pathways after doing questions so we can tailor your recommendations
+                                                Insert nice message here
                                                 </p>
                                             </div>
                                         </div>
@@ -94,12 +104,14 @@
 {% endblock content %}
 
 {% block scripts %}
-    <script>
+
         {% for question in question_pack.questionpack.all %}
+            <script>
             document.getElementById('button{{ forloop.counter }}').addEventListener("click", function (){
                 $('.collapse').collapse('hide');
                 $('#q{{ forloop.counter }}').collapse('show');
             });
+             </script>
         {% endfor %}
-    </script>
+
 {% endblock scripts %}

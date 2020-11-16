@@ -32,6 +32,7 @@ class Question(models.Model):
     question = models.TextField()
     answer = models.TextField()
     difficulty = models.CharField(max_length=100, choices=[('Easy', 'Easy'), ('Medium', 'Medium'),('Hard', 'Hard')], default='Medium')
+    estimated_time = models.IntegerField(verbose_name='Estimated time in mins', default=5)
 
     def __str__(self):
         return self.title
@@ -58,8 +59,13 @@ class UserAnswer(models.Model):
     )
     question = models.ForeignKey(
         Question,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='useranswers'
     )
-    my_answer = models.TextField()
+    my_answer = models.TextField(null=True)
     time_started = models.DateTimeField(null=True, blank=True)
     time_finished = models.DateTimeField(null=True, blank=True)
+    attempt = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user) + ": " + str(self.question)
