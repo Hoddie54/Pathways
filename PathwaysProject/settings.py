@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'pathway',
     'tracker',
     'questions',
+    'articles',
     'crispy_forms',
     'formtools',
     'whitenoise.runserver_nostatic',

@@ -27,4 +27,5 @@ urlpatterns = [
     path('', include('tracker.urls')),
     path('test/', include('questions.urls')),
     path('error/', TemplateView.as_view(template_name='error.html'), name='error'),
+    path('pathway/', include('pathway.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
